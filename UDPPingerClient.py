@@ -1,44 +1,35 @@
 import time
 from socket import *
 
-#Create UDP server
-serverName = 'localhost'
-serverPort = 12000
 clientSocket = socket(AF_INET, SOCK_DGRAM)
 
-#time for response
 clientSocket.settimeout(1)
-#Take in user input
 message = raw_input('Input lowercase sentence: ')
-#inital time
-#i_time = time.time()
-address = (serverName, serverPort)
+address = ('localhost', 12000)
 
-#Used to calculate max,min and average RTT
-temp = []
-#used to calculate the average of all RTT's
-counter = 0.0
-#Used to calculate packet loss percantage
-counter2 = 0
+rttStack = []
+packetLostCounter = 0
+
 for i in range(10):
-    i_time = time.time()
-    sendTime = time.time()
-    clientSocket.sendto(message, address)
+	print '*************************'
+	start = time.time()
+	print 'Ping ' + str(i) + ' ' + str(time.strftime("%H:%M:%S"))
+	clientSocket.sendto(message, address)
 
-    try:
-        modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-        f_time = time.time()
-        rtt = f_time - i_time
-        print modifiedMessage
-        print 'Round Trip Time: ' +str(rtt) + ' s'
-        temp.append(rtt)
-        counter += rtt
-    except timeout:
-        counter2 += 1
-        print 'Request Times out'
+	try:
+		response, serverAddress = clientSocket.recvfrom(2048)
+		done = time.time()
+		rtt = done - start
+		rttStack.append(rtt)
+		print response
+		print 'Round Trip Time: ' + str(rtt) + ' s'
 
-counter = counter/len(temp)
-print 'Max RTT: ' + str(max(temp)) + ' s'
-print 'Min RTT: ' + str(min(temp)) + ' s'
-print 'Avgerage RTT: ' + str(counter) + ' s'
-print 'Packet loss percentage: ' + str(counter2*10) + '%'
+	except timeout:
+		packetLostCounter += 1
+		print 'Request Timed out'
+	print '*************************'
+
+print 'Max. RTT: ' + str(max(rttStack)) + ' s'
+print 'Min. RTT: ' + str(min(rttStack)) + ' s'
+print 'Avgerage RTT: ' + str(sum(rttStack) / len(rttStack)) + ' s'
+print 'Packets lost: ' + str(packetLostCounter*10) + '%'
