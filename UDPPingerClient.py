@@ -48,6 +48,6 @@ print 'Max. RTT: ' + str(max(rttStack)) + ' s'
 print 'Min. RTT: ' + str(min(rttStack)) + ' s'
 print 'Avgerage RTT: ' + str(sum(rttStack) / len(rttStack)) + ' s'
 print 'Packets lost: ' + str(packetLostCounter*10) + '%'
-print 'Estimated RTT: ' + str(EstimatedRTT)
-print 'DevRTT: ' + str(DevRTT)
+print 'Estimated RTT: ' + str(EstimatedRTT) + ' s'
+print 'DevRTT: ' + str(DevRTT) + ' s'
 print '\n\n'
