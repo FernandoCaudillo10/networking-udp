@@ -43,6 +43,8 @@ for x in range(len(rttStack)):
 	EstimatedRTT=(1-alpha)*EstimatedRTT+alpha*SampleRTT
 	DevRTT=(1-beta)*DevRTT+beta*abs(SampleRTT-EstimatedRTT)
 
+TimeoutInterval = EstimatedRTT + 4 * DevRTT
+
 print '\n'
 print 'Max. RTT: ' + str(max(rttStack)) + ' s'
 print 'Min. RTT: ' + str(min(rttStack)) + ' s'
@@ -50,4 +52,5 @@ print 'Avgerage RTT: ' + str(sum(rttStack) / len(rttStack)) + ' s'
 print 'Packets lost: ' + str(packetLostCounter*10) + '%'
 print 'Estimated RTT: ' + str(EstimatedRTT) + ' s'
 print 'DevRTT: ' + str(DevRTT) + ' s'
+print 'Timeout Interval: ' + str(TimeoutInterval) + ' s'
 print '\n\n'
