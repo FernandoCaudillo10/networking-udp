@@ -1,4 +1,8 @@
+## Nicholas Cerda
+## Fernando Caudillo
+
 import time
+import random
 from socket import *
 
 clientSocket = socket(AF_INET, SOCK_DGRAM)
@@ -28,8 +32,22 @@ for i in range(10):
 		packetLostCounter += 1
 		print 'Request Timed out'
 	print '*************************'
+	print '\n'
 
+EstimatedRTT=0.0
+DevRTT=0.0
+alpha=0.125
+beta=.25
+for x in range(len(rttStack)):
+	SampleRTT=random.choice(rttStack)
+	EstimatedRTT=(1-alpha)*EstimatedRTT+alpha*SampleRTT
+	DevRTT=(1-beta)*DevRTT+beta*abs(SampleRTT-EstimatedRTT)
+
+print '\n'
 print 'Max. RTT: ' + str(max(rttStack)) + ' s'
 print 'Min. RTT: ' + str(min(rttStack)) + ' s'
 print 'Avgerage RTT: ' + str(sum(rttStack) / len(rttStack)) + ' s'
 print 'Packets lost: ' + str(packetLostCounter*10) + '%'
+print 'Estimated RTT: ' + str(EstimatedRTT)
+print 'DevRTT: ' + str(DevRTT)
+print '\n\n'
